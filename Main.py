@@ -222,6 +222,8 @@ class Game:
         self.maze.load_map()
         self.maze.num_edibles = 212
         self.caught_cherry = False
+        for character in self.charList:
+            character.state = SCATTER
 
         # changes the amount of time spent in scatter depending on the level
         if 2 <= self.level <= 5:
@@ -329,6 +331,7 @@ class Character:
                          (self.y * self.game.tile_size)))
 
     def choose_state(self):
+        # decides when to change states either by timer or location of the ghosts
         next_states = {SCATTER: CHASE, CHASE: SCATTER, SCARED: CHASE}
 
         if self.state in self.game.time_in_state:  # states that are timed:
@@ -341,6 +344,7 @@ class Character:
                 self.set_state(SCATTER)
 
     def set_state(self, new_state):
+        # changes the current state to the new state
         self.state = new_state
         if self.state in self.game.time_in_state:  # states that are timed:
             # sets the next time to change states
